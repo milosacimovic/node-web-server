@@ -4,10 +4,12 @@ const fs = require('fs')
 
 const port = process.env.PORT || 3000;
 var app = express();
+
+hbs.registerPartials(`${__dirname}/views/partials`)
 app.set('view engine', 'hbs');
-
-
-
+hbs.registerHelper('getCurrentYear', () => {
+  return new Date().getFullYear();
+});
 app.use((req, res, next) => {
   var now = new Date().toString();
   var log = `${now}: ${req.method} ${req.url}`
@@ -25,7 +27,6 @@ app.get('/', (req, res) => {
   //res.send('<h1>Hello Express!</h1>');
   res.render('home.hbs', {
     pageTitle: 'Home Page',
-    currentYear: new Date().getFullYear(),
     welcomeMessage: 'Hello there!'
   });
 });
@@ -36,10 +37,16 @@ app.get('/bad', (req, res) => {
   });
 });
 
+app.get('/projects', (req, res) => {
+  res.render('projects.hbs',{
+    pageTitle: 'Projects',
+    message: 'Portfolio page here'
+  })
+});
+
 app.get('/about', (req, res) => {
   res.render('about.hbs', {
-    pageTitle: 'About Page',
-    currentYear: new Date().getFullYear()
+    pageTitle: 'About Page'
   });
 });
 
